@@ -65,31 +65,145 @@ public protocol OCKColorStyler {
 
 /// Defines default values for color constants.
 public extension OCKColorStyler {
-    var label: UIColor { .label }
-    var secondaryLabel: UIColor { .secondaryLabel }
-    var tertiaryLabel: UIColor { .tertiaryLabel }
+    var label: UIColor {
+        if #available(iOS 13.0, *) {
+            return .label
+        } else {
+            return .black
+        }
+    }
+    var secondaryLabel: UIColor {
+        if #available(iOS 13.0, *) {
+            return .secondaryLabel
+        } else {
+            return .black
+        }
+    }
+    var tertiaryLabel: UIColor {
+        if #available(iOS 13.0, *) {
+            return .tertiaryLabel
+        } else {
+            return .black
+        }
+    }
 
-    var customBackground: UIColor { .systemBackground }
-    var secondaryCustomBackground: UIColor { .secondarySystemBackground }
+    var customBackground: UIColor {
+        if #available(iOS 13.0, *) {
+            return .systemBackground
+        } else {
+            return .white
+        }
+    }
+    var secondaryCustomBackground: UIColor {
+        if #available(iOS 13.0, *) {
+            return .secondarySystemBackground
+        } else {
+            return .white
+        }
+    }
 
-    var customGroupedBackground: UIColor { .systemGroupedBackground }
-    var secondaryCustomGroupedBackground: UIColor { .secondarySystemGroupedBackground }
-    var tertiaryCustomGroupedBackground: UIColor { .tertiarySystemGroupedBackground }
+    var customGroupedBackground: UIColor {
+        if #available(iOS 13.0, *) {
+            return .systemGroupedBackground
+        } else {
+            return .white
+        }
+    }
+    var secondaryCustomGroupedBackground: UIColor {
+        if #available(iOS 13.0, *) {
+            return .secondarySystemGroupedBackground
+        } else {
+            return .white
+        }
+    }
+    var tertiaryCustomGroupedBackground: UIColor {
+        if #available(iOS 13.0, *) {
+            return .tertiarySystemGroupedBackground
+        } else {
+            return .white
+        }
+    }
 
-    var separator: UIColor { .separator }
+    var separator: UIColor {
+        if #available(iOS 13.0, *) {
+            return .separator
+        } else {
+            return .black
+        }
+    }
 
-    var customFill: UIColor { .tertiarySystemFill }
-    var secondaryCustomFill: UIColor { .secondarySystemFill }
-    var tertiaryCustomFill: UIColor { .tertiarySystemFill }
-    var quaternaryCustomFill: UIColor { .quaternarySystemFill }
+    var customFill: UIColor {
+        if #available(iOS 13.0, *) {
+            return .tertiarySystemFill
+        } else {
+            return .black
+        }
+    }
+    var secondaryCustomFill: UIColor {
+        if #available(iOS 13.0, *) {
+            return .secondarySystemFill
+        } else {
+            return .black
+        }
+    }
+    var tertiaryCustomFill: UIColor {
+        if #available(iOS 13.0, *) {
+            return .tertiarySystemFill
+        } else {
+            return .black
+        }
+    }
+    var quaternaryCustomFill: UIColor {
+        if #available(iOS 13.0, *) {
+            return .quaternarySystemFill
+        } else {
+            return .black
+        }
+    }
 
-    var customBlue: UIColor { .systemBlue }
+    var customBlue: UIColor {
+        if #available(iOS 13.0, *) {
+            return .systemBlue
+        } else {
+            return .blue
+        }
+    }
 
-    var customGray: UIColor { .systemGray }
-    var customGray2: UIColor { .systemGray2 }
-    var customGray3: UIColor { .systemGray3 }
-    var customGray4: UIColor { .systemGray4 }
-    var customGray5: UIColor { .systemGray5 }
+    var customGray: UIColor {
+        if #available(iOS 13.0, *) {
+            return .systemGray
+        } else {
+            return .gray
+        }
+    }
+    var customGray2: UIColor {
+        if #available(iOS 13.0, *) {
+            return .systemGray2
+        } else {
+            return .gray
+        }
+    }
+    var customGray3: UIColor {
+        if #available(iOS 13.0, *) {
+            return .systemGray3
+        } else {
+            return .gray
+        }
+    }
+    var customGray4: UIColor {
+        if #available(iOS 13.0, *) {
+            return .systemGray4
+        } else {
+            return .gray
+        }
+    }
+    var customGray5: UIColor {
+        if #available(iOS 13.0, *) {
+            return .systemGray5
+        } else {
+            return .gray
+        }
+    }
 
     var white: UIColor { .white }
     var black: UIColor { .black }
