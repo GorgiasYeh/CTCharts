@@ -71,7 +71,7 @@ open class OCKHeaderView: OCKView {
     }()
 
     /// The image on the trialing end of the view. The default image is an arrow. Depending on the configuration, this may be nil.
-    public let detailDisclosureImage: UIImageView?
+//    public let detailDisclosureImage: UIImageView?
 
     /// Multi-line title label above `detailLabel`
     public let titleLabel: OCKLabel = {
@@ -111,10 +111,10 @@ open class OCKHeaderView: OCKView {
         self?.iconImageHeightConstraint?.constant = newHeight
     }
 
-    private lazy var detailDisclosurePointSize = OCKAccessibleValue(container: style(),
-                                                                    keyPath: \.dimension.symbolPointSize4) { [detailDisclosureImage] newPointSize in
-        detailDisclosureImage?.preferredSymbolConfiguration = .init(pointSize: newPointSize)
-    }
+//    private lazy var detailDisclosurePointSize = OCKAccessibleValue(container: style(),
+//                                                                    keyPath: \.dimension.symbolPointSize4) { [detailDisclosureImage] newPointSize in
+//        detailDisclosureImage?.preferredSymbolConfiguration = .init(pointSize: newPointSize)
+//    }
 
     /// Separator between the header and the body.
     private let separatorView: OCKSeparatorView?
@@ -128,7 +128,7 @@ open class OCKHeaderView: OCKView {
         self.configuration = configuration
 
         iconImageView = configuration.showsIconImage ? OCKHeaderView.makeIconImageView() : nil
-        detailDisclosureImage = configuration.showsDetailDisclosure ? OCKHeaderView.makeDetailDisclosureImage() : nil
+//        detailDisclosureImage = configuration.showsDetailDisclosure ? OCKHeaderView.makeDetailDisclosureImage() : nil
         separatorView = configuration.showsSeparator ? OCKSeparatorView() : nil
         super.init()
 
@@ -138,7 +138,7 @@ open class OCKHeaderView: OCKView {
     public required init?(coder aDecoder: NSCoder) {
         self.configuration = Configuration()
         iconImageView = nil
-        detailDisclosureImage = nil
+//        detailDisclosureImage = nil
         separatorView = nil
         super.init(coder: aDecoder)
     }
@@ -160,7 +160,7 @@ open class OCKHeaderView: OCKView {
 
         // Setup dynamic views based on the configuration
         if let separatorView = separatorView { contentStackView.addArrangedSubview(separatorView) }
-        if let detailDisclosureImage = detailDisclosureImage { headerStackView.addArrangedSubview(detailDisclosureImage) }
+//        if let detailDisclosureImage = detailDisclosureImage { headerStackView.addArrangedSubview(detailDisclosureImage) }
         if let iconImageView = iconImageView { headerStackView.insertArrangedSubview(iconImageView, at: 0) }
 
         addSubview(contentStackView)
@@ -180,15 +180,19 @@ open class OCKHeaderView: OCKView {
         return imageView
     }
 
-    private static func makeDetailDisclosureImage() -> UIImageView {
-        let image = UIImage(systemName: "chevron.right")
-        let imageView = UIImageView(image: image)
-        return imageView
-    }
+//    private static func makeDetailDisclosureImage() -> UIImageView {
+//        if #available(iOS 13.0, *) {
+//            let image = UIImage(systemName: "chevron.right")
+//        } else {
+//            let image = UIImage(named: "arrow_right")
+//        }
+//        let imageView = UIImageView(image: image)
+//        return imageView
+//    }
 
     private func constrainSubviews() {
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
-        detailDisclosureImage?.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+//        detailDisclosureImage?.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         iconImageView?.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         var constraints = contentStackView.constraints(equalTo: self)
 
@@ -210,17 +214,18 @@ open class OCKHeaderView: OCKView {
         titleLabel.textColor = style.color.label
         detailLabel.textColor = style.color.label
 
-        detailDisclosureImage?.tintColor = style.color.customGray3
+//        detailDisclosureImage?.tintColor = style.color.customGray3
         iconImageView?.tintColor = style.color.customGray3
 
         iconHeight.update(withContainer: style)
-        detailDisclosurePointSize.update(withContainer: style)
+//        detailDisclosurePointSize.update(withContainer: style)
     }
 
     override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            [iconHeight, detailDisclosurePointSize].forEach { $0.apply() }
+//            [iconHeight, detailDisclosurePointSize].forEach { $0.apply() }
+            [iconHeight].forEach { $0.apply() }
         }
     }
 }

@@ -48,7 +48,9 @@ public extension OCKCardable {
     func enableCardStyling(_ enabled: Bool, style: OCKStyler) {
         cardView.backgroundColor = style.color.secondaryCustomGroupedBackground
         cardView.layer.masksToBounds = false
-        cardView.layer.cornerCurve = .continuous
+        if #available(iOS 13.0, *) {
+            cardView.layer.cornerCurve = .continuous
+        }
         cardView.layer.cornerRadius = enabled ? style.appearance.cornerRadius2 : 0
         cardView.layer.shadowColor = enabled ? style.color.black.cgColor : UIColor.clear.cgColor
         cardView.layer.shadowOffset = style.appearance.shadowOffset1
@@ -57,7 +59,9 @@ public extension OCKCardable {
         cardView.layer.rasterizationScale = enabled ? UIScreen.main.scale : 0
         cardView.layer.shouldRasterize = enabled
 
-        contentView.layer.cornerCurve = .continuous
+        if #available(iOS 13.0, *) {
+            contentView.layer.cornerCurve = .continuous
+        }
         contentView.layer.cornerRadius = cardView.layer.cornerRadius
     }
 }
