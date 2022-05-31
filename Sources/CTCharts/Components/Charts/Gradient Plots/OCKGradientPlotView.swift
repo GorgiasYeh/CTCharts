@@ -33,7 +33,9 @@ import UIKit
 private let accessibilityElementBoundingBoxSize = CGSize(width: 10, height: 10)
 
 /// This is an abstract base class for plots that use a gradient mask.
-class OCKGradientPlotView<LayerType: OCKCartesianCoordinatesLayer> : UIView, OCKGradientPlotable, OCKMultiPlotable {
+class OCKGradientPlotView<LayerType: OCKCartesianCoordinatesLayer> : UIView, OCKGradientPlotable, OCKMultiPlotable, PlotViewDisplayable {
+    
+    public weak var delegate: PlotViewDelegate?
     
     let gradientLayer = CAGradientLayer()
     let pointsLayer = CAShapeLayer()
@@ -64,6 +66,72 @@ class OCKGradientPlotView<LayerType: OCKCartesianCoordinatesLayer> : UIView, OCK
 
     var seriesLayers: [LayerType] = []
     
+    private let selectLayer = CTSelectPlotLayer()
+    
+    var isHidenSelectLayer: Bool {
+        get { return selectLayer.isHidden }
+        set { selectLayer.isHidden = newValue }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    
+    private func setup() {
+        // 長按
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(OCKGradientPlotView.longPress(recognizer:)))
+
+        // 為視圖加入監聽手勢
+        self.addGestureRecognizer(longPress)
+        self.layer.addSublayer(selectLayer)
+        selectLayer.startColor = .clear
+        selectLayer.endColor = .clear
+        selectLayer.setPlotBounds(rect: graphBounds())
+        selectLayer.frame = bounds
+        isHidenSelectLayer = true
+    }
+    
+    var selectIndex = -1
+    
+    // 觸發長按手勢後 執行的動作
+    @objc func longPress(recognizer:UILongPressGestureRecognizer) {
+        if recognizer.state == .began {
+            print("長按開始")
+            self.delegate?.beganSelectPlotDataPoints()
+            
+        } else if recognizer.state == .ended {
+            print("長按結束")
+            selectIndex = -1
+            selectLayer.startColor = .clear
+            selectLayer.endColor = .clear
+            self.delegate?.endedSelectPlotDataPoints()
+        }
+        
+        if recognizer.state != .ended {
+            let point = recognizer.location(ofTouch: 0, in: recognizer.view)
+    //        print("第 1 指的位置：\(NSCoder.string(for: point))")
+            let index = findClosest(value: point.x, array: graphSpacePointsX)
+            let dataPoint = dataSeries.first?.dataPoints[index]
+            
+            if selectIndex != index {
+                selectLayer.startColor = .gray
+                selectLayer.endColor = .gray
+                selectIndex = index
+                selectLayer.dataPoints = [dataPoint!]
+                selectLayer.setPlotBounds(rect: graphBounds())
+                selectLayer.frame = bounds
+            }
+            
+            self.delegate?.didSelectPlotDataPoints(dataSeries, index)
+        }
+    }
+    
     override var intrinsicContentSize: CGSize {
         return CGSize(width: 200, height: 75)
     }
@@ -71,35 +139,30 @@ class OCKGradientPlotView<LayerType: OCKCartesianCoordinatesLayer> : UIView, OCK
     override func layoutSubviews() {
         super.layoutSubviews()
         seriesLayers.forEach { $0.frame = bounds }
-        resetAccessibilityElements()
+        resetGraphSpacePointsX()
     }
 
     func resetLayers() {
-        fatalError("This method must be overridden in subclasses!")
+        if let dataPoint = dataSeries.first?.dataPoints.first {
+            selectLayer.dataPoints = [dataPoint]
+        }
     }
-
-    func resetAccessibilityElements() {
-        accessibilityElements = []
-
+    
+    var graphSpacePointsX:[CGFloat] = []
+    
+    func findClosest(value:CGFloat, array:[CGFloat]) -> Array.Index {
+        let subArray = array.map {$0 - value}.map{ $0 < 0 ? $0 * -1 : $0 }
+        guard let index = subArray.firstIndex(of: subArray.min()!) else { return -1 }
+        return index
+    }
+    
+    func resetGraphSpacePointsX() {
+        graphSpacePointsX = []
         dataSeries.enumerated().forEach { seriesIndex, series in
             series.dataPoints.enumerated().forEach { pointIndex, point in
 
                 let pointInViewSpace = seriesLayers[seriesIndex].convert(graphSpacePoints: [point]).first!
-                let axOrigin = CGPoint(x: pointInViewSpace.x - accessibilityElementBoundingBoxSize.width / 2,
-                                       y: pointInViewSpace.y - accessibilityElementBoundingBoxSize.height / 2)
-                let axFrame = CGRect(origin: axOrigin, size: accessibilityElementBoundingBoxSize)
-
-                // Create the labels for this data point
-                let useProvidedLabel = pointIndex < series.accessibilityLabels.count
-                let label = useProvidedLabel ? series.accessibilityLabels[pointIndex] : "\(series.title), \(point.x), \(point.y)"
-
-                // Create an accessibility element for this singular data point
-                let element = UIAccessibilityElement(accessibilityContainer: self)
-                element.accessibilityFrameInContainerSpace = axFrame
-                element.accessibilityLabel = label
-                element.accessibilityTraits = UIAccessibilityTraits.staticText
-
-                accessibilityElements?.append(element)
+                graphSpacePointsX.append(pointInViewSpace.x)
             }
         }
     }

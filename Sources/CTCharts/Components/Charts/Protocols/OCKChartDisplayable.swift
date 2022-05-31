@@ -41,4 +41,17 @@ public protocol OCKChartViewDelegate: AnyObject {
     /// Called when the view displaying the chart was selected.
     /// - Parameter chartView: The view displaying the chart.
     func didSelectChartView(_ chartView: UIView & OCKChartDisplayable)
+    func didSelectPlotDataPoints(_ chartView: UIView & OCKChartDisplayable, _ selectIndex: Array.Index)
+//    func beganSelectPlotDataPoints()
+//    func endedSelectPlotDataPoints()
+}
+
+public protocol PlotViewDisplayable: AnyObject {
+    var delegate: PlotViewDelegate? { get set }
+}
+
+public protocol PlotViewDelegate: AnyObject {
+    func didSelectPlotDataPoints(_ dataSeries: [OCKDataSeries], _ index: Array.Index)
+    func beganSelectPlotDataPoints()
+    func endedSelectPlotDataPoints()
 }

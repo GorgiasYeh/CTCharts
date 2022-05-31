@@ -47,6 +47,7 @@ class OCKBarPlotView: OCKGradientPlotView<OCKBarLayer> {
             layer.setPlotBounds(rect: graphRect)
             layer.frame = bounds
         }
+        super.resetLayers()
     }
 
     // Adjust the x coordinates of the data series so that the bar charts line up next to one another.
@@ -73,10 +74,5 @@ class OCKBarPlotView: OCKGradientPlotView<OCKBarLayer> {
             let oldLayer = seriesLayers.removeLast()
             oldLayer.removeFromSuperlayer()
         }
-    }
-    
-    @objc
-    private func didTapHeader() {
-        print("didTapHeader")
     }
 }

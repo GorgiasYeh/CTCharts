@@ -31,9 +31,9 @@
 import UIKit
 
 class OCKGridView: UIView, OCKCartesianGridProtocol {
-    override class var layerClass: AnyClass {
-        return OCKGridLayer.self
-    }
+//    override class var layerClass: AnyClass {
+//        return OCKGridLayer.self
+//    }
 
     private let layout = OCKResponsiveLayout<CGFloat>(
         defaultLayout: 4,
@@ -48,13 +48,31 @@ class OCKGridView: UIView, OCKCartesianGridProtocol {
         ]
     )
 
-    private var gridLayer: OCKGridLayer {
-        return layer as! OCKGridLayer
+    private var gridLayer = OCKGridLayer()
+    
+    var isGridHiden: Bool {
+        get { return gridLayer.isHidden }
+        set { gridLayer.isHidden = newValue }
     }
+    
+    private var limitLayer = CTLimitLineLayer()
 
+    var isLimitHiden: Bool {
+        get { return limitLayer.isHidden }
+        set { limitLayer.isHidden = newValue }
+    }
+    
+    var limitLinePoint: Int {
+        get { return limitLayer.limitLinePoint }
+        set { limitLayer.limitLinePoint = newValue }
+    }
+    
     var numberFormatter: NumberFormatter {
         get { gridLayer.numberFormatter }
-        set { gridLayer.numberFormatter = newValue }
+        set {
+            gridLayer.numberFormatter = newValue
+            limitLayer.numberFormatter = newValue
+        }
     }
 
     var numberOfDivisions: Int {
@@ -63,22 +81,34 @@ class OCKGridView: UIView, OCKCartesianGridProtocol {
 
     var xMinimum: CGFloat? {
         get { return gridLayer.xMinimum }
-        set { gridLayer.xMinimum = newValue }
+        set {
+            gridLayer.xMinimum = newValue
+            limitLayer.xMinimum = newValue
+        }
     }
 
     var xMaximum: CGFloat? {
         get { return gridLayer.xMaximum }
-        set { gridLayer.xMaximum = newValue }
+        set {
+            gridLayer.xMaximum = newValue
+            limitLayer.xMaximum = newValue
+        }
     }
 
     var yMinimum: CGFloat? {
         get { return gridLayer.yMinimum }
-        set { gridLayer.yMinimum = newValue }
+        set {
+            gridLayer.yMinimum = newValue
+            limitLayer.yMinimum = newValue
+        }
     }
 
     var yMaximum: CGFloat? {
         get { return gridLayer.yMaximum }
-        set { gridLayer.yMaximum = newValue }
+        set {
+            gridLayer.yMaximum = newValue
+            limitLayer.yMaximum = newValue
+        }
     }
 
     override init(frame: CGRect) {
@@ -95,7 +125,13 @@ class OCKGridView: UIView, OCKCartesianGridProtocol {
 
         let fontSize = layout.responsiveLayoutRule(traitCollection: traitCollection)
         gridLayer.fontSize = fontSize
-
+        gridLayer.isHidden = false
+        self.layer.addSublayer(gridLayer)
+        
+        limitLayer.fontSize = fontSize
+        limitLayer.isHidden = true
+        self.layer.addSublayer(limitLayer)
+        
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -103,6 +139,12 @@ class OCKGridView: UIView, OCKCartesianGridProtocol {
 
         let fontSize = layout.responsiveLayoutRule(traitCollection: traitCollection)
         gridLayer.fontSize = fontSize
-
+        limitLayer.fontSize = fontSize
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gridLayer.frame = self.bounds
+        limitLayer.frame = self.bounds
     }
 }
