@@ -55,6 +55,9 @@ open class OCKCartesianChartView: OCKView, OCKChartDisplayable {
         $0.showsSeparator = false
         $0.showsDetailDisclosure = true
     }
+    
+    /// SelectView
+    public let SelectView = UIView()
 
     /// The main content of the view.
     public let graphView: OCKCartesianGraphView
@@ -66,8 +69,12 @@ open class OCKCartesianChartView: OCKView, OCKChartDisplayable {
     /// - Parameter type: The type of the chart.
     public init(type: OCKCartesianGraphView.PlotType) {
         graphView = OCKCartesianGraphView(type: type)
+//        graphView.isHidenSelectLayer = true
         super.init()
         setup()
+        
+        graphView.delegate = self
+        
     }
 
     @available(*, unavailable)
@@ -93,16 +100,21 @@ open class OCKCartesianChartView: OCKView, OCKChartDisplayable {
         addSubview(contentView)
         contentView.addSubview(contentStackView)
         headerContainerView.addSubview(headerView)
+        headerContainerView.addSubview(SelectView)
+        SelectView.backgroundColor = style().color.customBackground
+        SelectView.isHidden = true
         [headerContainerView, graphView].forEach { contentStackView.addArrangedSubview($0) }
     }
 
     private func constrainSubviews() {
-        [contentView, contentStackView, headerView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [contentView, contentStackView, headerView, SelectView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate(
             contentStackView.constraints(equalTo: self, directions: [.horizontal]) +
             contentStackView.constraints(equalTo: layoutMarginsGuide, directions: [.vertical]) +
             headerView.constraints(equalTo: headerContainerView.layoutMarginsGuide, directions: [.horizontal]) +
             headerView.constraints(equalTo: headerContainerView, directions: [.vertical]) +
+            SelectView.constraints(equalTo: headerContainerView.layoutMarginsGuide, directions: [.horizontal]) +
+            SelectView.constraints(equalTo: headerContainerView, directions: [.vertical]) +
             contentStackView.constraints(equalTo: contentView))
     }
 
@@ -119,5 +131,25 @@ open class OCKCartesianChartView: OCKView, OCKChartDisplayable {
         contentStackView.spacing = cachedStyle.dimension.directionalInsets1.top
         directionalLayoutMargins = cachedStyle.dimension.directionalInsets1
         headerContainerView.directionalLayoutMargins = cachedStyle.dimension.directionalInsets1
+    }
+}
+
+extension OCKCartesianChartView : PlotViewDelegate {
+    public func didSelectPlotDataPoints(_ dataSeries: [OCKDataSeries], _ index: Int) {
+        self.delegate?.didSelectPlotDataPoints(self, index)
+    }
+    
+    public func beganSelectPlotDataPoints() {
+        if !graphView.isHidenSelectLayer {
+            SelectView.isHidden = false
+//            self.delegate?.beganSelectPlotDataPoints()
+        }
+    }
+    
+    public func endedSelectPlotDataPoints() {
+        if !graphView.isHidenSelectLayer {
+            SelectView.isHidden = true
+//            self.delegate?.endedSelectPlotDataPoints()
+        }
     }
 }

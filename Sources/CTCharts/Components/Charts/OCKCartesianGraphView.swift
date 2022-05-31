@@ -42,7 +42,7 @@ import UIKit
 ///     |                                                       |
 ///     +-------------------------------------------------------+
 ///
-open class OCKCartesianGraphView: OCKView, OCKMultiPlotable {
+open class OCKCartesianGraphView: OCKView, OCKMultiPlotable, PlotViewDisplayable {
 
     /// An enumerator specifying the types of plots this view can display.
     public enum PlotType: String, CaseIterable {
@@ -53,6 +53,8 @@ open class OCKCartesianGraphView: OCKView, OCKMultiPlotable {
 
     // MARK: Properties
 
+    public weak var delegate: PlotViewDelegate?
+    
     /// The data points displayed in the graph.
     public var dataSeries: [OCKDataSeries] {
         get { return plotView.dataSeries }
@@ -122,6 +124,38 @@ open class OCKCartesianGraphView: OCKView, OCKMultiPlotable {
         get { return axisView.selectedIndex }
         set { axisView.selectedIndex = newValue }
     }
+    
+    /// 是否顯示標示線，顯示時須同時設定標示線位置(limitLinePoint)
+    public var isLimitHiden: Bool {
+        get { return gridView.isLimitHiden }
+        set { gridView.isLimitHiden = newValue }
+    }
+    
+    /// 標示線位置
+    public var limitLinePoint: Int {
+        get { return gridView.limitLinePoint }
+        set { gridView.limitLinePoint = newValue }
+    }
+    
+    /// 是否顯示背景網格
+    public var isGridHiden: Bool {
+        get { return gridView.isGridHiden }
+        set { gridView.isGridHiden = newValue }
+    }
+    
+    public var isHidenSelectLayer: Bool {
+        get {
+            if let pv = self.plotView as? OCKGradientPlotView<OCKBarLayer> {
+                return pv.isHidenSelectLayer
+            }
+            return true
+        }
+        set {
+            if let pv = self.plotView as? OCKGradientPlotView<OCKBarLayer> {
+                pv.isHidenSelectLayer = newValue
+            }
+        }
+    }
 
     private let gridView: OCKGridView
     private let plotView: UIView & OCKMultiPlotable
@@ -145,8 +179,13 @@ open class OCKCartesianGraphView: OCKView, OCKMultiPlotable {
             case .bar: return OCKBarPlotView()
             }
         }()
+        
         super.init()
         setup()
+        
+        if let pv = self.plotView as? OCKGradientPlotView<OCKBarLayer> {
+            pv.delegate = self
+        }
     }
 
     @available(*, unavailable)
@@ -203,5 +242,25 @@ open class OCKCartesianGraphView: OCKView, OCKMultiPlotable {
 
     private func applyTintColor() {
         axisView.tintColor = tintColor
+    }
+}
+
+extension OCKCartesianGraphView : PlotViewDelegate {
+    public func didSelectPlotDataPoints(_ dataSeries: [OCKDataSeries], _ index: Int) {
+        if !isHidenSelectLayer {
+            self.delegate?.didSelectPlotDataPoints(dataSeries, index)
+        }
+    }
+    
+    public func beganSelectPlotDataPoints() {
+        if !isHidenSelectLayer {
+            self.delegate?.beganSelectPlotDataPoints()
+        }
+    }
+    
+    public func endedSelectPlotDataPoints() {
+        if !isHidenSelectLayer {
+            self.delegate?.endedSelectPlotDataPoints()
+        }
     }
 }

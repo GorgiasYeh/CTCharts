@@ -48,6 +48,7 @@ class OCKLinePlotView: OCKGradientPlotView<OCKLineLayer> {
             layer.setPlotBounds(rect: graphRect)
             layer.frame = bounds
         }
+        super.resetLayers()
     }
 
     // Adjust the x coordinates of the data series so that two identical lines are slightly offset, so as to be distinguishable.
