@@ -7,15 +7,15 @@
 
 import UIKit
 
-class CTSelectPlotLayer: OCKCartesianCoordinatesLayer, OCKGradientPlotable {
+class CTSelectPlotLayer: CTCartesianCoordinatesLayer, CTGradientPlotable {
     let gradientLayer = CAGradientLayer()
     let pointsLayer = CAShapeLayer()
 
-    var startColor: UIColor = OCKStyle().color.customGray {
+    var startColor: UIColor = CTStyle().color.customGray {
         didSet { gradientLayer.colors = [startColor.cgColor, endColor.cgColor] }
     }
 
-    var endColor: UIColor = OCKStyle().color.customGray {
+    var endColor: UIColor = CTStyle().color.customGray {
         didSet { gradientLayer.colors = [startColor.cgColor, endColor.cgColor] }
     }
 
@@ -49,7 +49,7 @@ class CTSelectPlotLayer: OCKCartesianCoordinatesLayer, OCKGradientPlotable {
         gradientLayer.mask = pointsLayer
         addSublayer(gradientLayer)
 
-        pointsLayer.fillColor = OCKStyle().color.customGray.cgColor
+        pointsLayer.fillColor = CTStyle().color.customGray.cgColor
         pointsLayer.strokeColor = nil
     }
 

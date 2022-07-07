@@ -33,7 +33,7 @@ import UIKit
 
 /// Accessible view configuration that contains layout information for different `UserInterfaceSizeClass`
 /// and `UIContentSizeCategory` combinations.
-public struct OCKResponsiveLayout<LayoutOption> {
+struct CTResponsiveLayout<LayoutOption> {
 
     // MARK: - Instance Properties
 
@@ -53,14 +53,14 @@ public struct OCKResponsiveLayout<LayoutOption> {
 
     // MARK: - Initializers
 
-    /// Initialize a `OCKResponsiveLayout` with default and specific size class rules.
+    /// Initialize a `CTResponsiveLayout` with default and specific size class rules.
     ///
     /// - Parameter defaultRuleSet: The default layout rules  for when no matching size class rule is
     /// provided, usually when layouts need to support dynamic type, but not size class.
     /// - Parameter sizeClassSpecificRuleSets: Size class specific layout rule sets
     public init(
         defaultLayout: LayoutOption,
-        anySizeClassRuleSet: [OCKResponsiveLayout.Rule<LayoutOption>],
+        anySizeClassRuleSet: [CTResponsiveLayout.Rule<LayoutOption>],
         sizeClassSpecificRuleSets: [SizeClassRuleSet<LayoutOption>] = []) {
 
         let defaultRule = Rule(layout: defaultLayout, greaterThanOrEqualToContentSizeCategory: .unspecified)
@@ -102,7 +102,7 @@ public struct OCKResponsiveLayout<LayoutOption> {
     public struct SizeClassRuleSet<LayoutOption> {
 
         /// A set of rules (combinations of `UIUserInterFaceSizeClass` combinations and user defined layouts.
-        public let rules: [OCKResponsiveLayout<LayoutOption>.Rule<LayoutOption>]
+        public let rules: [CTResponsiveLayout<LayoutOption>.Rule<LayoutOption>]
 
         /// The valid size class combinations for this set of rules
         public let sizeClasses: [SizeClass]
@@ -113,7 +113,7 @@ public struct OCKResponsiveLayout<LayoutOption> {
         /// - Parameter rules: The `UIContentSizeCategory` rules for these size classes
         public init(
             sizeClasses: [SizeClass],
-            rules: [OCKResponsiveLayout<LayoutOption>.Rule<LayoutOption>]
+            rules: [CTResponsiveLayout<LayoutOption>.Rule<LayoutOption>]
         ) {
             self.sizeClasses = sizeClasses
             self.rules = rules
@@ -125,7 +125,7 @@ public struct OCKResponsiveLayout<LayoutOption> {
         /// - Parameter rules: The `UIContentSizeCategory` rules for this size class
         public init(
             sizeClass: SizeClass = (horizontal: .unspecified, vertical: .unspecified),
-            rules: [OCKResponsiveLayout<LayoutOption>.Rule<LayoutOption>]
+            rules: [CTResponsiveLayout<LayoutOption>.Rule<LayoutOption>]
         ) {
             self.init(sizeClasses: [sizeClass], rules: rules)
         }
@@ -165,7 +165,7 @@ public struct OCKResponsiveLayout<LayoutOption> {
                         fatalError(
                             """
                             A layout could not be determined which should be impossible due to `defaultLayout: LayoutOption` in the
-                            OCKResponsiveLayout class being non-optional.
+                            CTResponsiveLayout class being non-optional.
                             """
                         )
             }

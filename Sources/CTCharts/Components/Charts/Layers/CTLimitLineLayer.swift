@@ -8,7 +8,7 @@
 import UIKit
 
 /// This layer shows horizontal limit lines and is intended to be added as a background to various kinds of graphs.
-class CTLimitLineLayer: OCKCartesianCoordinatesLayer {
+class CTLimitLineLayer: CTCartesianCoordinatesLayer {
     private enum Constants {
         static let margin: CGFloat = 8
     }
@@ -22,7 +22,7 @@ class CTLimitLineLayer: OCKCartesianCoordinatesLayer {
     }
 
     /// The color of the limit lines.
-    var limitLineColor: UIColor = OCKStyle().color.label {
+    var limitLineColor: UIColor = CTStyle().color.label {
         didSet {
             limitLines.strokeColor = limitLineColor.cgColor
         }
