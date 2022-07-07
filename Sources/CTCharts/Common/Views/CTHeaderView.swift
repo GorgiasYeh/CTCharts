@@ -1,49 +1,20 @@
-/*
- Copyright (c) 2019, Apple Inc. All rights reserved.
- 
- Redistribution and use in source and binary forms, with or without modification,
- are permitted provided that the following conditions are met:
- 
- 1.  Redistributions of source code must retain the above copyright notice, this
- list of conditions and the following disclaimer.
- 
- 2.  Redistributions in binary form must reproduce the above copyright notice,
- this list of conditions and the following disclaimer in the documentation and/or
- other materials provided with the distribution.
- 
- 3. Neither the name of the copyright holder(s) nor the names of any contributors
- may be used to endorse or promote products derived from this software without
- specific prior written permission. No license is granted to the trademarks of
- the copyright holders even if such marks are included in this software.
- 
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 
 import UIKit
 
 /// A title and detail label. The view can also be configured to show a separator,
 /// icon image, and a detail disclosure arrow.
 ///
-///    +----------------------------------------+
-///    | +----+                                 |
-///    | |icon|  Title             [detail      |
-///    | |img |  Detail             disclosure] |
-///    | +----+                                 |
-///    |                                        |
-///    |  ------------------------------------  |
-///    |                                        |
-///    +----------------------------------------+
+///     +-------------------------------------------------------+
+///     | +----+                                                |
+///     | |icon| [title]                                        |
+///     | |img | [detail]                                       |
+///     | +----+                                                |
+///     |                                                       |
+///     |  ---------------------------------------------------  |
+///     |                                                       |
+///     +-------------------------------------------------------+
 ///
-open class OCKHeaderView: OCKView {
+open class CTHeaderView: CTView {
 
     private enum Constants {
         static let spacing: CGFloat = 4
@@ -64,8 +35,8 @@ open class OCKHeaderView: OCKView {
     // MARK: Properties
 
     /// Vertical stack view that holds the main content.
-    public let contentStackView: OCKStackView = {
-        let stackView = OCKStackView(style: .plain)
+    let contentStackView: CTStackView = {
+        let stackView = CTStackView(style: .plain)
         stackView.axis = .vertical
         return stackView
     }()
@@ -74,16 +45,16 @@ open class OCKHeaderView: OCKView {
 //    public let detailDisclosureImage: UIImageView?
 
     /// Multi-line title label above `detailLabel`
-    public let titleLabel: OCKLabel = {
-        let label = OCKLabel(textStyle: .headline, weight: .bold)
+    public let titleLabel: CTLabel = {
+        let label = CTLabel(textStyle: .headline, weight: .bold)
         label.numberOfLines = 0
         label.animatesTextChanges = true
         return label
     }()
 
     /// Multi-line detail label below `titleLabel`.
-    public let detailLabel: OCKLabel = {
-        let label = OCKLabel(textStyle: .caption1, weight: .medium)
+    public let detailLabel: CTLabel = {
+        let label = CTLabel(textStyle: .caption1, weight: .medium)
         label.numberOfLines = 0
         label.animatesTextChanges = true
         return label
@@ -96,28 +67,23 @@ open class OCKHeaderView: OCKView {
     private let configuration: Configuration
 
     /// Stack view that holds the text content in the header.
-    private let headerTextStackView = OCKStackView.vertical()
+    private let headerTextStackView = CTStackView.vertical()
 
     /// Stack view that holds the content in the header.
-    private let headerStackView: OCKStackView = {
-        let stackView = OCKStackView.horizontal()
+    private let headerStackView: CTStackView = {
+        let stackView = CTStackView.horizontal()
         stackView.alignment = .center
         return stackView
     }()
 
     private var iconImageHeightConstraint: NSLayoutConstraint?
 
-    private lazy var iconHeight = OCKAccessibleValue(container: style(), keyPath: \.dimension.imageHeight2) { [weak self] newHeight in
+    private lazy var iconHeight = CTAccessibleValue(container: style(), keyPath: \.dimension.imageHeight2) { [weak self] newHeight in
         self?.iconImageHeightConstraint?.constant = newHeight
     }
 
-//    private lazy var detailDisclosurePointSize = OCKAccessibleValue(container: style(),
-//                                                                    keyPath: \.dimension.symbolPointSize4) { [detailDisclosureImage] newPointSize in
-//        detailDisclosureImage?.preferredSymbolConfiguration = .init(pointSize: newPointSize)
-//    }
-
     /// Separator between the header and the body.
-    private let separatorView: OCKSeparatorView?
+    private let separatorView: CTSeparatorView?
 
     // MARK: Life Cycle
 
@@ -127,9 +93,8 @@ open class OCKHeaderView: OCKView {
         configurationHandler(&configuration)
         self.configuration = configuration
 
-        iconImageView = configuration.showsIconImage ? OCKHeaderView.makeIconImageView() : nil
-//        detailDisclosureImage = configuration.showsDetailDisclosure ? OCKHeaderView.makeDetailDisclosureImage() : nil
-        separatorView = configuration.showsSeparator ? OCKSeparatorView() : nil
+        iconImageView = configuration.showsIconImage ? CTHeaderView.makeIconImageView() : nil
+        separatorView = configuration.showsSeparator ? CTSeparatorView() : nil
         super.init()
 
         accessibilityTraits = configuration.showsDetailDisclosure ? [.header, .button] : [.header]
@@ -175,7 +140,7 @@ open class OCKHeaderView: OCKView {
     }
 
     private static func makeIconImageView() -> UIImageView {
-        let imageView = OCKCircleImageView()
+        let imageView = CTCircleImageView()
         imageView.contentMode = .scaleAspectFill
         return imageView
     }
@@ -230,7 +195,7 @@ open class OCKHeaderView: OCKView {
     }
 }
 
-private class OCKCircleImageView: UIImageView {
+private class CTCircleImageView: UIImageView {
 
     private let maskLayer = CAShapeLayer()
 
