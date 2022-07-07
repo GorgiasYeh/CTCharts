@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  spec.name         = "CHCharts"
+  spec.name         = "CTCharts"
   spec.version      = "0.0.1"
   spec.summary      = "Line Chart & Bar Chart for iOS."
 
