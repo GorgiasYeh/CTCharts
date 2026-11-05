@@ -4,6 +4,19 @@ Health-style line and bar charts for **UIKit** apps. Supports **iOS 11+**.
 
 [Documentation](https://gorgiasyeh.github.io/CTCharts/documentation/ctcharts/) · Swift Package Manager · CocoaPods
 
+## Demo
+
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/demo-dark.png">
+    <img src=".github/assets/demo-light.png" alt="Bar chart, line chart, and bar chart with a limit line" width="280">
+  </picture>
+  &nbsp;
+  <img src=".github/assets/demo-select.gif" alt="Long-press to select a bar" width="420">
+</p>
+
+Run it yourself: open `Examples/CTChartsDemo/CTChartsDemo.xcodeproj` and run on an iOS simulator.
+
 ## Why
 
 Apple's Swift Charts works only with SwiftUI and needs iOS 16.
@@ -84,6 +97,7 @@ chart.graphView.limitLinePoint = 3500
 ```
 
 More in [Getting Started](https://gorgiasyeh.github.io/CTCharts/documentation/ctcharts/gettingstarted).
+Full example: [`Examples/CTChartsDemo`](Examples/CTChartsDemo/CTChartsDemo/ChartsViewController.swift).
 
 ## Documentation
 

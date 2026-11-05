@@ -1,0 +1,25 @@
+name: CTChartsDemo
+options:
+  bundleIdPrefix: io.github.gorgiasyeh
+  deploymentTarget:
+    iOS: "15.0"
+packages:
+  CTCharts:
+    path: ../..
+targets:
+  CTChartsDemo:
+    type: application
+    platform: iOS
+    sources: [CTChartsDemo]
+    dependencies:
+      - package: CTCharts
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.gorgiasyeh.CTChartsDemo
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGNING_ALLOWED: NO
