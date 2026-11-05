@@ -136,7 +136,7 @@ open class CTCartesianGraphView: CTView, CTMultiPlotable {
 
     /// Create a graph view with the specified style.
     ///
-    /// - Parameter plotType: The style of the graph view.
+    /// - Parameter type: The style of the graph view.
     public init(type: PlotType) {
         self.gridView = CTGridView()
         self.axisView = CTGraphAxisView()
